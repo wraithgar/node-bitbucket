@@ -1,0 +1,25 @@
+{
+  "name": "bitbucketapi",
+  "version": "2.0.0",
+  "description": "",
+  "main": "lib/bitbucket.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wraithgar/node-bitbucket.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wraithgar/node-bitbucket/issues"
+  },
+  "homepage": "https://github.com/wraithgar/node-bitbucket#readme",
+  "dependencies": {
+    "boom": "^4.0.0",
+    "hoek": "^4.0.2",
+    "wreck": "^9.0.0"
+  }
+}
