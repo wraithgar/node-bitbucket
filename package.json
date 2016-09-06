@@ -4,7 +4,8 @@
   "description": "",
   "main": "lib/bitbucket.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "lab -a code -t 100 -L -v -e test",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,13 @@
     "boom": "^4.0.0",
     "hoek": "^4.0.2",
     "wreck": "^9.0.0"
+  },
+  "devDependencies": {
+    "code": "^3.0.2",
+    "eslint": "^3.4.0",
+    "eslint-config-hapi": "^10.0.0",
+    "lab": "^11.0.1",
+    "nock": "^8.0.0",
+    "node-uuid": "^1.4.7"
   }
 }
