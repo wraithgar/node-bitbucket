@@ -20,6 +20,7 @@
   "homepage": "https://github.com/wraithgar/node-bitbucket#readme",
   "dependencies": {
     "boom": "^4.0.0",
+    "debug": "^2.2.0",
     "hoek": "^4.0.2",
     "wreck": "^9.0.0"
   },
