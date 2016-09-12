@@ -20,8 +20,8 @@ internals.token = uuid();
 internals.bitbucket_user = { uuid: uuid(), username: 'testUser' };
 internals.bitbucket_repos = [{ uuid: uuid(), name: 'testRepo' }, { uuid: uuid(), name: 'otherRepo' }];
 internals.issue = { type: 'issue', content: 'would be an object but eh, testing' };
-internals.error = { error: 'oops' };
-internals.invalid_token = { error: 'invalid token' };
+internals.error = { error: { message: 'oops' } };
+internals.invalid_token = { error: { message: 'invalid token' } };
 
 describe('bitbucketapi', () => {
 
@@ -77,7 +77,7 @@ describe('bitbucketapi', () => {
 
                 nockScope.done();
                 expect(err.output.statusCode).to.equal(500);
-                expect(err.message).to.equal(internals.error.error);
+                expect(err.message).to.equal(internals.error.error.message);
             });
         });
 
@@ -95,7 +95,7 @@ describe('bitbucketapi', () => {
 
                 nockScope.done();
                 expect(err.output.statusCode).to.equal(511);
-                expect(err.message).to.equal(internals.invalid_token.error);
+                expect(err.message).to.equal(internals.invalid_token.error.message);
             });
         });
     });
