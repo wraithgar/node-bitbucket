@@ -28,8 +28,12 @@
     "code": "^3.0.2",
     "eslint": "^3.4.0",
     "eslint-config-hapi": "^10.0.0",
+    "git-validate": "^2.2.1",
     "lab": "^11.0.1",
     "nock": "^8.0.0",
     "node-uuid": "^1.4.7"
-  }
+  },
+  "pre-commit": [
+    "test"
+  ]
 }
