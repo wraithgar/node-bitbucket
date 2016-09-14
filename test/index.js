@@ -46,6 +46,7 @@ describe('bitbucketapi', () => {
             const nockScope = Nock('https://api.bitbucket.org')
                 .get('/2.0/user')
                 .matchHeader('authorization', `Bearer ${internals.token}`)
+                .matchHeader('user-agent', 'Node Bitbucket')
                 .reply(200, internals.bitbucket_user);
 
             return bitbucket.apiCall({ path: '/user' }).then((response) => {
@@ -74,6 +75,7 @@ describe('bitbucketapi', () => {
             const nockScope = Nock('https://api.bitbucket.org')
                 .get('/2.0/user')
                 .matchHeader('authorization', `Bearer ${internals.token}`)
+                .matchHeader('content-type', 'application/json')
                 .reply(500, internals.error);
 
             return bitbucket.apiCall({ path: '/user' }).then((response) => {
@@ -102,6 +104,24 @@ describe('bitbucketapi', () => {
                 nockScope.done();
                 expect(err.output.statusCode).to.equal(511);
                 expect(err.message).to.equal(internals.invalid_token.error.message);
+            });
+        });
+
+        it('handles 400 from bitbucket', () => {
+
+            const nockScope = Nock('https://api.bitbucket.org')
+                .get('/2.0/user')
+                .matchHeader('authorization', `Bearer ${internals.token}`)
+                .reply(400, 'Bad Request');
+
+            return bitbucket.apiCall({ path: '/user' }).then((response) => {
+
+                fail('Should not resolve');
+            }).catch((err) => {
+
+                nockScope.done();
+                expect(err.output.statusCode).to.equal(400);
+                expect(err.message).to.equal('Bad Request');
             });
         });
     });
@@ -155,6 +175,7 @@ describe('bitbucketapi', () => {
                 .post('/site/oauth2/access_token')
                 .matchHeader('content-type', 'application/x-www-form-urlencoded')
                 .matchHeader('authorization', 'Basic ' + (new Buffer(internals.client_id + ':' + internals.client_secret, 'utf8')).toString('base64'))
+                .matchHeader('user-agent', 'Node Bitbucket')
                 .reply(200, internals.refreshed_token);
 
             return bitbucket.apiCall({ path: '/user' }).then((response) => {
