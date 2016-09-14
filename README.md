@@ -23,7 +23,11 @@ const bitbucket = new BitbucketApi({
   token: 'required oauth token'
   refresh_token: `optional refresh token`,
   client_id: 'optional client_id',
-  client_secret: 'optional client secret'
+  client_secret: 'optional client secret',
+  token_refresh_function: function (new_token) {
+    // If defined, this function will be called with the value of a new token if one is generated
+    // You can use it to update your local state if you need.
+  }
 });
 
 return bitbucket.apiCall({ path: '/user' });
