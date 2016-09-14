@@ -35,5 +35,8 @@
   },
   "pre-commit": [
     "test"
+  ],
+  "files": [
+    "lib"
   ]
 }
