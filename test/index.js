@@ -183,10 +183,50 @@ describe('bitbucketapi', () => {
                 nockAuthScope.done();
                 nockApiScope.done();
                 expect(bitbucket.token_refreshed).to.equal(true);
+                expect(bitbucket.options.token).to.equal(internals.refreshed_token.access_token);
                 expect(response).to.equal(internals.bitbucket_user);
             });
         });
 
+        it('calls provided token refresh function', () => {
+
+            let refreshedToken;
+            const bitbucket = new BitbucketApi({
+                token: internals.token,
+                refresh_token: internals.refresh_token,
+                client_id: internals.client_id,
+                client_secret: internals.client_secret,
+                token_refresh_function: function (newToken) {
+
+                    refreshedToken = newToken;
+                }
+
+            });
+
+            const nockApiScope = Nock('https://api.bitbucket.org')
+                .get('/2.0/user')
+                .matchHeader('authorization', `Bearer ${internals.token}`)
+                .reply(401, internals.expired_token)
+                .get('/2.0/user')
+                .matchHeader('authorization', `Bearer ${internals.new_token}`)
+                .reply(200, internals.bitbucket_user);
+
+            const nockAuthScope = Nock('https://bitbucket.org')
+                .post('/site/oauth2/access_token')
+                .matchHeader('content-type', 'application/x-www-form-urlencoded')
+                .matchHeader('authorization', 'Basic ' + (new Buffer(internals.client_id + ':' + internals.client_secret, 'utf8')).toString('base64'))
+                .matchHeader('user-agent', 'Node Bitbucket')
+                .reply(200, internals.refreshed_token);
+
+            return bitbucket.apiCall({ path: '/user' }).then((response) => {
+
+                nockAuthScope.done();
+                nockApiScope.done();
+                expect(bitbucket.token_refreshed).to.equal(true);
+                expect(response).to.equal(internals.bitbucket_user);
+                expect(refreshedToken).to.equal(internals.refreshed_token.access_token);
+            });
+        });
         it('handles error refreshing token', () => {
 
             const bitbucket = new BitbucketApi({
